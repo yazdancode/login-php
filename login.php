@@ -11,11 +11,8 @@ if (isset($_POST['signup_btn'])) {
 }
 
 if (isset($_POST['login_btn'])) {
-    if (!empty($_POST['email']) && !empty($_POST['pswd'])) {
-        $email = $_POST['email'];
-        $password = $_POST['pswd'];
-        echo "Login: Email: $email, Password: $password";
-    }
+    $data = $_POST['frm'] ?? [];
+    $result = login($data);
 }
 ?>
 
@@ -65,10 +62,10 @@ if (isset($_POST['login_btn'])) {
     <div class="login" style="display:none;">
         <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
             <label>
-                <input type="email" name="email" placeholder="ایمیل" required />
+                <input type="email" name="frm[email]" placeholder="ایمیل" required />
             </label>
             <label>
-                <input type="password" name="pswd" placeholder="رمز عبور" required />
+                <input type="password" name="frm[pswd]" placeholder="رمز عبور" required />
             </label>
             <input type="submit" value="ورود" name="login_btn" />
         </form>

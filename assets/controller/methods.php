@@ -1,5 +1,5 @@
 <?php
-include 'assets/StatusCodes/status.php';
+include __DIR__ . '/../StatusCodes/status.php';
 include 'config.php';
 
 $errorMessage = '';
@@ -150,3 +150,51 @@ function signup(array $data): bool
         return false;
     }
 }
+
+function login(array $data): bool {
+    global $errorMessage;
+    $email = validate($data['email'] ?? '');
+    $password = validate($data['pswd'] ?? '');
+
+    if (empty($email) || empty($password)) {
+        HttpStatus::setStatus(HttpStatus::BAD_REQUEST);
+        $errorMessage = 'ایمیل و رمز عبور باید وارد شوند.';
+        return false;
+    }
+
+    if (!checkEmail($email)) {
+        HttpStatus::setStatus(HttpStatus::UNAUTHORIZED);
+        $errorMessage = 'ایمیل یا رمز عبور اشتباه است.';
+        return false;
+    }
+
+    $pdo = getPDOConnection();
+    $stmt = $pdo->prepare("SELECT password, username FROM accounts WHERE email = ?");
+    $stmt->execute([$email]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$row || !password_verify($password, $row['password'])) {
+        HttpStatus::setStatus(HttpStatus::UNAUTHORIZED);
+        $errorMessage = 'ایمیل یا رمز عبور اشتباه است.';
+        return false;
+    }
+
+    session_start();
+    $_SESSION['username'] = $row['username'];
+    $_SESSION['token'] = md5($row['username']);
+
+    header('Location: dashboard/index.php');
+    exit;
+}
+
+
+function logout()
+{
+    session_unset();
+    session_destroy();
+    header('location : ../login.php');
+;
+}
+
+
+
