@@ -69,6 +69,9 @@ if (isset($_POST['login_btn'])) {
             </label>
             <input type="submit" value="ورود" name="login_btn" />
         </form>
+        <div style="margin-top: 10px; text-align: center;">
+            <a href="#" style="color: #007BFF; text-decoration: none;">رمز عبور خود را فراموش کرده‌اید؟</a>
+        </div>
     </div>
 
 </div>

@@ -179,7 +179,9 @@ function login(array $data): bool {
         return false;
     }
 
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
     $_SESSION['username'] = $row['username'];
     $_SESSION['token'] = md5($row['username']);
 
@@ -192,9 +194,40 @@ function logout()
 {
     session_unset();
     session_destroy();
-    header('location : ../login.php');
-;
+
+    // حذف کوکی سشن هم بهتره
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 42000,
+            $params["path"], $params["domain"],
+            $params["secure"], $params["httponly"]
+        );
+    }
+
+    header('Location: ../login.php');
+    exit;
 }
+
+
+//function forgot_password()
+//{
+//    $errorMessage = '';
+//    $successMessage = '';
+//    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//        $email = $_POST['email'] ?? '';
+//        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+//            if (checkEmail($email)) {
+//                $token = bin2hex(random_bytes(16));
+//                $pdo = getPDOConnection();
+//                $stmt = $pdo->prepare("INSERT INTO accounts (email, token, created_at) VALUES (?, ?, NOW())");
+//                $stmt->execute([$email, $token]);
+//                sendPasswordResetEmail($email, $token);
+//            }
+//        }
+//    }
+//
+//}
+
 
 
 

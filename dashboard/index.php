@@ -1,38 +1,36 @@
 <?php
-include_once '../assets/controller/methods.php';
 
-session_start();  // حتما باید session رو شروع کنید تا از $_SESSION استفاده کنید
+include_once __DIR__ . '/../assets/controller/methods.php';
 
-// بررسی وجود توکن جلسه برای احراز هویت
-if (!isset($_SESSION['token'])) {
-    header('Location: ../index.php');  // دقت کن: بین header و مقدارش نباید فاصله باشه، 'Location: ...'
-    exit();  // بعد از ریدایرکت بهتره همیشه exit بذارید
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 
-// بررسی وجود پارامتر logout در URL
+// چک احراز هویت
+if (!isset($_SESSION['token'])) {
+    header('Location: ../index.php');
+    exit;
+}
+
+// خروج
 if (isset($_GET['logout'])) {
-    logout();
+    logout(); // تابع logout باید با exit تمام بشه
 }
 ?>
-
-
 <!doctype html>
-<html lang="en">
+<html lang="fa">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل کاربری</title>
 </head>
 <body>
-<h1>Welcome to your panel!</h1>
+<h1>به پنل کاربری خوش آمدید!</h1>
 <hr>
-<p>Username: <?php echo  $_SESSION['username']?></p>
-<a href="<?php echo htmlspecialchars('index.php'); ?>">
-    <button>
-        logout
-    </button>
+<p>نام کاربری: <?php echo htmlspecialchars($_SESSION['username']); ?></p>
+<a href="?logout=1">
+    <button>خروج</button>
 </a>
 </body>
 </html>
