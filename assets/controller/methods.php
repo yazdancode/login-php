@@ -1,4 +1,7 @@
 <?php
+
+use JetBrains\PhpStorm\NoReturn;
+
 include __DIR__ . '/../StatusCodes/status.php';
 include 'config.php';
 
@@ -190,7 +193,8 @@ function login(array $data): bool {
 }
 
 
-function logout()
+#[NoReturn]
+function logout(): void
 {
     session_unset();
     session_destroy();
@@ -208,25 +212,6 @@ function logout()
     exit;
 }
 
-
-//function forgot_password()
-//{
-//    $errorMessage = '';
-//    $successMessage = '';
-//    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-//        $email = $_POST['email'] ?? '';
-//        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-//            if (checkEmail($email)) {
-//                $token = bin2hex(random_bytes(16));
-//                $pdo = getPDOConnection();
-//                $stmt = $pdo->prepare("INSERT INTO accounts (email, token, created_at) VALUES (?, ?, NOW())");
-//                $stmt->execute([$email, $token]);
-//                sendPasswordResetEmail($email, $token);
-//            }
-//        }
-//    }
-//
-//}
 
 
 
