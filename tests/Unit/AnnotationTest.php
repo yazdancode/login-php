@@ -15,8 +15,12 @@ class AnnotationTest extends TestCase
     {
         $this->value++;
         $this->assertEquals(1, $this->value);
+        return $this->value;
     }
 
+    /**
+     * @depends testCorrectValue
+     */
     public function testCorrectValue2()
     {
         $this->value++;
