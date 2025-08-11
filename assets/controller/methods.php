@@ -11,7 +11,7 @@ function validate($data): string
 {
     $data = trim($data);
     $data = stripslashes($data);
-    return htmlspecialchars($data);
+    return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
 }
 
 function getPDOConnection(): PDO
